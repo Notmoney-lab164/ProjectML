@@ -1,0 +1,9 @@
+artifact_location: file:D:/FPTU/FALL 26/MDS301/drive-download-20260910T010036Z-1-001/Assessments/PROJECT/mlruns/207990172897066403
+creation_time: 1794287560774
+effective_trace_archival_retention: null
+experiment_id: '207990172897066403'
+last_update_time: 1794287560774
+lifecycle_stage: active
+name: IMDB_Sentiment_Analysis
+trace_location: null
+workspace: default

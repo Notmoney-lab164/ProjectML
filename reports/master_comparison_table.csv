@@ -1,0 +1,6 @@
+Model,Train F1,Test F1,CV F1 (5-fold),Test Acc,Test Precision,Test Recall,Train time (s),ms / review,Tuned
+Logistic Regression (Baseline),0.9539,0.9019,0.9038,0.9004,0.8912,0.913,59.1,1.049,No
+Linear SVM,0.9996,0.9159,0.9152,0.9149,0.909,0.9228,125.9,1.151,No
+Random Forest,1.0,0.859,0.8442,0.858,0.8564,0.8616,132.9,1.03,No
+Logistic Regression (Tuned ★),0.9881,0.9112,0.913,0.9101,0.9029,0.9196,885.4,1.023,Yes
+"DistilBERT (Fine-tuned, dropout=0.1)",0.96,0.9194,0.96,0.9167,0.9167,0.9194,214.3,83.34,Yes

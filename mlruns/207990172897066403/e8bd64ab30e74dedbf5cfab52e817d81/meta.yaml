@@ -1,0 +1,14 @@
+artifact_uri: file:D:/FPTU/FALL 26/MDS301/drive-download-20260910T010036Z-1-001/Assessments/PROJECT/mlruns/207990172897066403/e8bd64ab30e74dedbf5cfab52e817d81/artifacts
+end_time: 1794291332284
+entry_point_name: ''
+experiment_id: '207990172897066403'
+lifecycle_stage: active
+run_id: e8bd64ab30e74dedbf5cfab52e817d81
+run_name: DistilBERT (dropout=0.3)
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794291332093
+status: 3
+tags: []
+user_id: YACOP

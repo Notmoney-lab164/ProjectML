@@ -1,0 +1,14 @@
+artifact_uri: file:D:/FPTU/FALL 26/MDS301/drive-download-20260910T010036Z-1-001/Assessments/PROJECT/mlruns/207990172897066403/0fbcf67712b64126ad3e338c885817fe/artifacts
+end_time: 1794288200788
+entry_point_name: ''
+experiment_id: '207990172897066403'
+lifecycle_stage: active
+run_id: 0fbcf67712b64126ad3e338c885817fe
+run_name: Linear SVM
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794287790903
+status: 3
+tags: []
+user_id: YACOP

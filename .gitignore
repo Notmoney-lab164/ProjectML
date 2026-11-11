@@ -1,0 +1,28 @@
+# Environments
+.venv/
+venv/
+__pycache__/
+*/__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Large raw datasets (use python src/data_collection.py to reproduce)
+data/IMDB Dataset.csv
+data/raw/IMDB Dataset.csv
+data/train.csv
+data/test.csv
+data/processed/*.csv
+
+# Temporary training outputs
+out_dropout_*/
+*.zip
+~$*
+
+# GitHub chặn file > 100 MB: trọng số DistilBERT (256 MB) không push, chạy src/generate_figures_and_bert.py để tạo lại
+models/distilbert/model.safetensors
+
+# Dữ liệu sinh ra khi chạy và tài liệu không thuộc project
+data/raw/
+logs/*.csv
+*.docx

@@ -1,0 +1,36 @@
+{
+  "overall_drift_detected": false,
+  "alpha": 0.05,
+  "reference_samples": 2000,
+  "current_samples": 1000,
+  "features": {
+    "word_count": {
+      "ks_statistic": 0.0245,
+      "p_value": 0.8154,
+      "drift_detected": false,
+      "ref_mean": 232.531,
+      "cur_mean": 232.582
+    },
+    "exclamation_count": {
+      "ks_statistic": 0.0115,
+      "p_value": 1.0,
+      "drift_detected": false,
+      "ref_mean": 0.992,
+      "cur_mean": 1.007
+    },
+    "uppercase_ratio": {
+      "ks_statistic": 0.036,
+      "p_value": 0.3506,
+      "drift_detected": false,
+      "ref_mean": 0.028,
+      "cur_mean": 0.028
+    },
+    "negation_count": {
+      "ks_statistic": 0.0275,
+      "p_value": 0.691,
+      "drift_detected": false,
+      "ref_mean": 3.225,
+      "cur_mean": 3.387
+    }
+  }
+}

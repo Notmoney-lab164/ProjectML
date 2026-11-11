@@ -1,0 +1,14 @@
+artifact_uri: file:D:/FPTU/FALL 26/MDS301/drive-download-20260910T010036Z-1-001/Assessments/PROJECT/mlruns/207990172897066403/b4f441064df743dbbd243f83d77f054d/artifacts
+end_time: 1794289370022
+entry_point_name: ''
+experiment_id: '207990172897066403'
+lifecycle_stage: active
+run_id: b4f441064df743dbbd243f83d77f054d
+run_name: Logistic Regression (Tuned - Best)
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1794288430517
+status: 3
+tags: []
+user_id: YACOP

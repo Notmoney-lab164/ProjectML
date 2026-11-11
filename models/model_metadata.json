@@ -1,0 +1,25 @@
+{
+  "model_name": "TF-IDF (1-2 gram) + MetaFeatures + Logistic Regression (Tuned)",
+  "version": "1.0.0",
+  "training_date": "2026-11-10 12:42:50",
+  "dataset": "IMDB Dataset of 50K Movie Reviews",
+  "raw_samples": 50000,
+  "deduplicated_samples": 49582,
+  "duplicates_removed": 418,
+  "html_reviews_count": 29200,
+  "train_samples": 39665,
+  "test_samples": 9917,
+  "best_params": {
+    "features__tfidf__min_df": 5,
+    "model__C": 4
+  },
+  "metrics": {
+    "train_f1": 0.9881,
+    "test_f1": 0.9112,
+    "cv_f1_5fold": 0.913,
+    "test_accuracy": 0.9101,
+    "test_precision": 0.9029,
+    "test_recall": 0.9196,
+    "inference_ms_per_review": 1.023
+  }
+}
