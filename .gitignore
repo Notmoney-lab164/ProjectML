@@ -7,11 +7,8 @@ __pycache__/
 .ipynb_checkpoints/
 */.ipynb_checkpoints/
 
-# Large raw datasets (use python src/data_collection.py to reproduce)
-data/IMDB Dataset.csv
+# Bản sao dữ liệu trùng lặp (notebook dùng data/IMDB Dataset.csv, data/train.csv, data/test.csv)
 data/raw/IMDB Dataset.csv
-data/train.csv
-data/test.csv
 data/processed/*.csv
 
 # Temporary training outputs
@@ -19,7 +16,7 @@ out_dropout_*/
 *.zip
 ~$*
 
-# GitHub chặn file > 100 MB: trọng số DistilBERT (256 MB) không push, chạy src/generate_figures_and_bert.py để tạo lại
+# GitHub chặn file > 100 MB: trọng số DistilBERT (256 MB) không push, tải ở mục Releases của repo rồi bỏ vào models/distilbert/
 models/distilbert/model.safetensors
 
 # Dữ liệu sinh ra khi chạy và tài liệu không thuộc project
