@@ -1,6 +1,6 @@
 # Phân tích cảm xúc review phim IMDB — Hệ thống Machine Learning ứng dụng End-to-End
 
-Hệ thống Machine Learning và Deep Learning (NLP) hoàn chỉnh, tự động phân loại review phim thành **Tích cực (Positive)**, **Tiêu cực (Negative)** hoặc **Lẫn lộn / Không chắc chắn (Mixed / Uncertain)**. Hệ thống gồm Pipeline Scikit-learn, các đặc trưng tự tạo (Feature Engineering), mô hình **DistilBERT** đã fine-tune, theo dõi thí nghiệm bằng **MLflow**, REST API bằng **FastAPI**, đóng gói bằng **Docker** và **giám sát data drift**.
+Hệ thống Machine Learning và Deep Learning (NLP) hoàn chỉnh, tự động phân loại review phim thành **Tích cực (Positive)**, **Tiêu cực (Negative)**, **Vừa khen vừa chê (Mixed)** hoặc **Không chắc chắn (Uncertain)**. Hệ thống gồm Pipeline Scikit-learn, các đặc trưng tự tạo (Feature Engineering), mô hình **DistilBERT** đã fine-tune, theo dõi thí nghiệm bằng **MLflow**, REST API bằng **FastAPI**, đóng gói bằng **Docker** và **giám sát data drift**.
 
 ---
 
@@ -8,7 +8,7 @@ Hệ thống Machine Learning và Deep Learning (NLP) hoàn chỉnh, tự độn
 
 - **Lĩnh vực:** Xử lý ngôn ngữ tự nhiên (NLP) — Phân tích dữ liệu truyền thông & giải trí
 - **Bài toán:** Các nền tảng xem phim trực tuyến, rạp chiếu và hãng phim nhận hàng chục nghìn review của khán giả mỗi ngày. Đọc thủ công để nắm phản hồi của khán giả vừa chậm, vừa thiếu nhất quán và không thể mở rộng. Project xây dựng hệ thống tự động phân loại cảm xúc nhị phân và giải thích kết quả theo từng từ, trên bộ dữ liệu **IMDB 50K Movie Reviews**.
-- **Vì sao dùng Logistic Regression cho demo và API:** Dù **DistilBERT** fine-tune đạt độ chính xác cao nhất khi train đầy đủ trên GPU (~92.8% F1), pipeline **TF-IDF (1–2 gram) + MetaFeatures + Logistic Regression** đã tune đạt **91.12% Test F1** (chỉ kém DistilBERT khoảng 1.7%), nhưng **chạy nhanh hơn ~80 lần trên CPU (`1.023 ms/review`)**, có xác suất (`predict_proba`) để phát hiện review không chắc chắn (`confidence < 0.60`), và giải thích được đóng góp của từng từ (`explain()`).
+- **Vì sao dùng Logistic Regression cho demo và API:** pipeline **TF-IDF (1–2 gram) + MetaFeatures + Logistic Regression** đã tune đạt **91.12% Test F1**, chỉ kém Linear SVM (91.59%) khoảng 0.5 điểm, nhưng có xác suất (`predict_proba`) để tính độ tin cậy, gắn nhãn `uncertain` (độ tin cậy < 0.60) và `mixed` (các vế câu trái chiều); chạy nhanh (`1.023 ms/review`, so với khoảng 83 ms/review của DistilBERT trên CPU); và giải thích được đóng góp của từng từ (`explain()`). DistilBERT mới được fine-tune trên tập con 320 review bằng CPU (không có GPU) nên kết quả chưa so sánh ngang được với các mô hình cổ điển.
 
 ---
 
@@ -16,17 +16,31 @@ Hệ thống Machine Learning và Deep Learning (NLP) hoàn chỉnh, tự độn
 
 | Thành viên | Họ tên | MSSV | Phụ trách | Phần thuyết trình |
 | :--- | :--- | :--- | :--- | :--- |
-| **Thành viên 1 (Nhóm trưởng)** | Võ Phan Bảo Chương | SE196645 | Kiến trúc tổng thể, EDA (`01_eda.ipynb`), `src/features.py`, MLOps | Bài toán, kiểm tra dữ liệu & Feature Engineering |
-| **Thành viên 2** | Member B | SEXXXXXX | `src/pipeline.py`, các mô hình cổ điển & GridSearchCV 5-fold (`02_classic_models.ipynb`) | Mô hình cổ điển & phân tích Bias–Variance |
-| **Thành viên 3** | Member C | SEXXXXXX | Fine-tune `DistilBERT` & Regularization (`03_distilbert.ipynb`) | Kiến trúc Deep Learning, Loss Curve & Regularization |
-| **Thành viên 4** | Member D | SEXXXXXX | Phân tích lỗi, FastAPI (`api/app.py`), Docker & Demo trực tiếp | Bảng so sánh tổng hợp, Demo trực tiếp & Hạn chế |
+| **Thành viên 1 (Nhóm trưởng)** | Võ Phan Bảo Chương | SE196645 | Kiến trúc tổng thể, EDA (`01_eda.ipynb`), `src/features.py` | Bài toán, dữ liệu & tiền xử lý |
+| **Thành viên 2** | Phạm Tiến Triển | SE182026 | Mô hình cổ điển & GridSearchCV (`02_classic_models.ipynb`), DistilBERT (`03_distilbert.ipynb`), MLflow | Mô hình & thí nghiệm |
+| **Thành viên 3** | Trần Quốc Thái | SE192786 | FastAPI (`api/app.py`), Docker, kiểm thử (`tests/`), giám sát drift (`src/monitor.py`) | Demo, kiểm thử & hạn chế |
+
+### Cách làm việc nhóm
+
+| Công việc | Công cụ |
+| :--- | :--- |
+| Trao đổi hằng ngày, phân công, gửi file | Nhóm **Zalo** |
+| Họp nhóm và thuyết trình | **Google Meet** |
+| Quản lý code, chia sẻ dữ liệu và mô hình | **GitHub** (repo ProjectML, mục Releases) |
+| Soạn kịch bản thuyết trình | **Google Docs** |
+| Ghi lại và so sánh kết quả thí nghiệm | **MLflow** |
+
+**Quy trình:**
+- Phân công và báo tiến độ qua nhóm Zalo.
+- Trước khi sửa code, mỗi thành viên chạy `git pull` để lấy bản mới nhất; sửa xong thì `git push` và báo lên Zalo.
+- Mọi lần train được ghi lại bằng MLflow để cả nhóm cùng xem và so sánh.
 
 ---
 
 ## 3. Cài đặt
 
 ### Yêu cầu
-- Python `3.10+` (đã chạy thử trên Python `3.11` và `3.13`)
+- Python `3.12+` (numpy 2.5 yêu cầu; nhóm chạy trên Python `3.14`)
 - Git & VS Code (cài extension Python và Jupyter)
 
 ### Các bước cài đặt
@@ -93,7 +107,7 @@ Tất cả mô hình có giám sát được train và đánh giá trên cùng m
 | **Logistic Regression (Baseline)** | 0.9539 | 0.9019 | 0.9038 | 0.9004 | 0.8912 | 0.9130 | 59.1 | 1.049 | Không | Mặc định `C=1.0, min_df=3` |
 | **Linear SVM (`LinearSVC`)** | 0.9996 | 0.9159 | 0.9152 | 0.9149 | 0.9090 | 0.9228 | 125.9 | 1.151 | Không | Phân tách tốt trên dữ liệu nhiều chiều, không có sẵn `predict_proba` |
 | **Random Forest (`200 cây`)** | 1.0000 | 0.8590 | 0.8442 | 0.8580 | 0.8564 | 0.8616 | 132.9 | 1.030 | Không | Overfitting nặng (chênh lệch F1 `14.1%` trên dữ liệu văn bản thưa) |
-| **DistilBERT (`Fine-tune, dropout=0.1`)** | 0.9600 | **0.9194** | 0.9268 (Val) | **0.9167** | 0.9167 | 0.9194 | 214.3 | 83.340 | Có | Độ chính xác cao nhất (`models/distilbert/`), chậm hơn ~81 lần trên CPU |
+| **DistilBERT (`Fine-tune, dropout=0.1`)** | 0.9600 | **0.9194** | 0.9268 (Val) | **0.9167** | 0.9167 | 0.9194 | 214.3 | 83.340 | Có | Chỉ train trên 320 review và test trên 120 review (CPU), chưa so sánh ngang được; chậm hơn ~81 lần trên CPU |
 | **Logistic Regression (Đã tune ★)** | **0.9881** | **0.9112** | **0.9130** | **0.9101** | **0.9029** | **0.9196** | **885.4** | **1.023** | **Có** | **Được chọn cho API (`C=4, min_df=5`)** |
 
 ---
@@ -111,7 +125,7 @@ Mở Swagger UI trên trình duyệt: **http://localhost:8000/docs**
 | :--- | :--- | :--- |
 | `GET` | `/health` | Kiểm tra trạng thái dịch vụ và tên mô hình đang dùng |
 | `GET` | `/model-info` | Trả về phiên bản mô hình, ngày train, siêu tham số tốt nhất và các chỉ số đánh giá |
-| `POST` | `/predict` | Dự đoán cảm xúc (`positive`, `negative`, hoặc `mixed / uncertain` nếu độ tin cậy < 0.6) và ghi lại độ trễ |
+| `POST` | `/predict` | Dự đoán cảm xúc: `positive`, `negative`, `mixed` (các vế câu trái chiều, review ≤ 60 từ) hoặc `uncertain` (độ tin cậy < 0.6); ghi lại độ trễ |
 | `POST` | `/explain` | Dự đoán cảm xúc và trả về các từ đóng góp nhiều nhất theo hướng tích cực / tiêu cực |
 | `POST` | `/batch-predict` | Dự đoán hàng loạt cho một danh sách review |
 
@@ -128,14 +142,23 @@ curl -X POST http://localhost:8000/predict \
   -H "Content-Type: application/json" \
   -d '{"text": "An absolute masterpiece, brilliant acting and a beautiful story"}'
 # Kết quả mong đợi:
-# {"prediction":"positive","confidence":0.996,"latency_ms":2.15}
+# {"prediction":"positive","confidence":0.977,"latency_ms":2.15}   (latency_ms thay đổi theo máy)
 
-# 3. Kiểm tra xử lý phủ định
+# 3. Review vừa khen vừa chê
 curl -X POST http://localhost:8000/predict \
   -H "Content-Type: application/json" \
-  -d '{"text": "Honestly, it was not bad at all"}'
+  -d '{"text": "Amazing visuals, awful dialogue."}'
 # Kết quả mong đợi:
-# {"prediction":"positive","confidence":0.829,"latency_ms":1.84}
+# {"prediction":"mixed","confidence":0.827,"latency_ms":3.1,
+#  "clauses":[{"text":"Amazing visuals","label":"positive","confidence":0.992},
+#             {"text":"awful dialogue","label":"negative","confidence":0.993}]}
+
+# 4. Review trung tính
+curl -X POST http://localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"text": "The movie is two hours long and was released in 2010"}'
+# Kết quả mong đợi:
+# {"prediction":"uncertain","confidence":0.599,"latency_ms":1.9}
 ```
 
 ### Ví dụ gọi API bằng Python `requests`
@@ -147,7 +170,7 @@ resp = requests.post(
     json={"text": "Worst movie I have ever seen, a total waste of time"}
 )
 print(resp.json())
-# {'prediction': 'negative', 'confidence': 0.999, 'latency_ms': 1.92}
+# {'prediction': 'negative', 'confidence': 1.0, 'latency_ms': 1.92}
 ```
 
 ---
@@ -242,6 +265,6 @@ python src/generate_figures_and_bert.py
 # 3. Kiểm tra data drift
 python src/monitor.py
 
-# 4. Chạy bộ unit test (8 test)
+# 4. Chạy bộ unit test (9 test)
 pytest tests/ -v
 ```

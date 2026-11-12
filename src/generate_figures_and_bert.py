@@ -335,19 +335,22 @@ def run_distilbert_experiment():
     fig, axes = plt.subplots(1, 2, figsize=(13, 5))
     r01 = bert_runs["0.1"]
     r03 = bert_runs["0.3"]
+    # 2 dòng cuối của va_logs là lần đánh giá trên tập test và tập train sau khi train xong,
+    # không phải validation, nên bỏ ra khi vẽ đường validation loss và cột Validation F1
+    va01, va03 = r01["va_logs"][:-2], r03["va_logs"][:-2]
 
     axes[0].plot(*zip(*r01["tr_logs"]), label="Train Loss (dropout=0.1)", color="#2b6cb0", linestyle="-")
     axes[0].plot(
-        [x[0] for x in r01["va_logs"]],
-        [x[1] for x in r01["va_logs"]],
+        [x[0] for x in va01],
+        [x[1] for x in va01],
         "o-",
         label="Val Loss (dropout=0.1)",
         color="#2b6cb0",
     )
     axes[0].plot(*zip(*r03["tr_logs"]), label="Train Loss (dropout=0.3)", color="#c53030", linestyle="--")
     axes[0].plot(
-        [x[0] for x in r03["va_logs"]],
-        [x[1] for x in r03["va_logs"]],
+        [x[0] for x in va03],
+        [x[1] for x in va03],
         "s--",
         label="Val Loss (dropout=0.3)",
         color="#c53030",
@@ -358,11 +361,11 @@ def run_distilbert_experiment():
     axes[0].legend()
 
     labels = ["Dropout = 0.1\n(+L2=0.01 + EarlyStop)", "Dropout = 0.3\n(+L2=0.01 + EarlyStop)"]
-    val_f1s = [r01["val_f1"], r03["val_f1"]]
+    val_f1s = [max(x[2] for x in va01), max(x[2] for x in va03)]
     test_f1s = [r01["test_f1"], r03["test_f1"]]
     x = np.arange(len(labels))
     w = 0.32
-    axes[1].bar(x - w / 2, val_f1s, width=w, label="Validation F1", color="#3182ce")
+    axes[1].bar(x - w / 2, val_f1s, width=w, label="Best Validation F1", color="#3182ce")
     axes[1].bar(x + w / 2, test_f1s, width=w, label="Test F1", color="#38a169")
     axes[1].set_xticks(x)
     axes[1].set_xticklabels(labels)

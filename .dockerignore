@@ -1,0 +1,12 @@
+.venv/
+.git/
+data/
+mlruns/
+logs/
+notebooks/
+reports/
+models/distilbert/
+**/__pycache__/
+.pytest_cache/
+*.zip
+*.docx

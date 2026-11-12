@@ -1,4 +1,5 @@
-FROM python:3.11-slim
+# numpy 2.5.x cần Python >= 3.12; dùng cùng Python 3.14 như máy phát triển
+FROM python:3.14-slim
 
 WORKDIR /app
 
@@ -8,8 +9,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     METADATA_PATH=models/model_metadata.json \
     PREDICTION_LOG_PATH=logs/predictions.csv
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Chỉ cài thư viện cần cho API (nhẹ, build nhanh)
+COPY requirements-api.txt .
+RUN pip install --no-cache-dir -r requirements-api.txt
 
 COPY src/ ./src/
 COPY api/ ./api/
