@@ -46,7 +46,8 @@ Hệ thống Machine Learning và Deep Learning (NLP) hoàn chỉnh, tự độn
 ### Các bước cài đặt
 ```bash
 # 1. Clone repository và vào thư mục gốc của project
-cd PROJECT
+git clone https://github.com/Notmoney-lab164/ProjectML.git
+cd ProjectML
 
 # 2. Tạo và kích hoạt môi trường ảo
 python -m venv .venv
@@ -58,6 +59,8 @@ python -m venv .venv
 # 3. Cài các thư viện (đã cố định phiên bản)
 pip install -r requirements.txt
 ```
+
+**4. Tải mô hình DistilBERT (chỉ cần khi chạy notebook 03):** file `model.safetensors` (256 MB) vượt giới hạn 100 MB của GitHub nên không nằm trong repo. Tải ở mục **Releases**: https://github.com/Notmoney-lab164/ProjectML/releases, rồi đặt vào thư mục `models/distilbert/`. API và các notebook 01, 02 không cần file này.
 
 ---
 
