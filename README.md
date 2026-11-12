@@ -177,15 +177,30 @@ print(resp.json())
 
 ## 8. Đóng gói bằng Docker
 
+**Yêu cầu:** cài và mở **Docker Desktop**. Nếu đang chạy `uvicorn` hoặc `mlflow ui` trên máy thì tắt trước để không trùng cổng 8000 / 5000.
+
 ```bash
-# Build Docker image
-docker build -t imdb-sentiment-api .
-
-# Chạy container ở cổng 8000
-docker run -p 8000:8000 imdb-sentiment-api
-
-# Hoặc chạy cả API và MLflow UI bằng Docker Compose
+# Build và chạy cả API và MLflow UI (lần build đầu khoảng 3 phút)
 docker compose up --build
+```
+
+| Container | Địa chỉ | Chức năng |
+| :--- | :--- | :--- |
+| `imdb-sentiment-api` | http://localhost:8000/docs | API dự đoán cảm xúc (FastAPI) |
+| `imdb-mlflow-ui` | http://localhost:5000 | Xem kết quả các lần train (MLflow) |
+
+- Nhóm container có tên `project`, image API tên `project-sentiment-api`.
+- Image API dùng `python:3.14-slim` và chỉ cài thư viện trong `requirements-api.txt` (không có torch / transformers), nên nhẹ và build nhanh.
+- Image chỉ chứa `src/`, `api/` và mô hình `models/sentiment_lr.joblib`; file `.dockerignore` loại bỏ `.venv/`, `data/`, `notebooks/`.
+- Log dự đoán được ghi ra thư mục `logs/` trên máy nhờ volume.
+
+```bash
+docker ps              # xem các container đang chạy
+docker compose down    # tắt và xóa container
+
+# Chạy riêng API, không dùng Compose
+docker build -t imdb-sentiment-api .
+docker run -p 8000:8000 imdb-sentiment-api
 ```
 
 ---
@@ -196,7 +211,9 @@ Tất cả các lần train (Logistic Regression Baseline, Linear SVM, Random Fo
 
 ```bash
 # Mở MLflow UI trên máy (MLflow 3.x, lưu dạng file)
-set MLFLOW_ALLOW_FILE_STORE=true
+# PowerShell (terminal VS Code trên Windows):
+$env:MLFLOW_ALLOW_FILE_STORE="true"
+# Nếu dùng CMD thì thay bằng: set MLFLOW_ALLOW_FILE_STORE=true
 mlflow ui --backend-store-uri file:./mlruns --port 5000
 ```
 Sau đó mở **http://localhost:5000** để xem siêu tham số, các chỉ số và mô hình đã lưu.
@@ -234,7 +251,7 @@ PROJECT/
 │   ├── model_metadata.json           # Phiên bản mô hình, chỉ số & siêu tham số tốt nhất
 │   └── distilbert/                   # Checkpoint DistilBERT đã fine-tune & tokenizer
 ├── tests/
-│   └── test_pipeline.py              # 8 unit test pytest cho features, pipeline, drift & API
+│   └── test_pipeline.py              # 9 unit test pytest cho features, pipeline, nhãn mixed, drift & API
 ├── reports/
 │   ├── Project_Proposal.md           # Đề xuất project (Giai đoạn 1)
 │   ├── Technical_Report.md           # Báo cáo kỹ thuật đầy đủ (Giai đoạn 4)
@@ -242,10 +259,12 @@ PROJECT/
 │   ├── monitoring_report.json        # Báo cáo data drift (KS-test)
 │   └── *.png                         # Hình EDA, Confusion Matrix, TF-IDF & Loss Curve
 ├── mlruns/                           # Nơi MLflow lưu các thí nghiệm
-├── Dockerfile                        # Định nghĩa container cho dịch vụ FastAPI
+├── Dockerfile                        # Định nghĩa container cho dịch vụ FastAPI (Python 3.14)
+├── .dockerignore                     # Loại .venv, data, notebooks khỏi lúc build image
 ├── docker-compose.yml                # Chạy nhiều dịch vụ (API + MLflow UI)
 ├── pytest.ini                        # Cấu hình pytest
-├── requirements.txt                  # Thư viện Python (đã cố định phiên bản)
+├── requirements.txt                  # Thư viện Python đầy đủ (đã cố định phiên bản)
+├── requirements-api.txt              # Thư viện tối thiểu cho API trong Docker
 └── README.md                         # Tài liệu project
 ```
 
